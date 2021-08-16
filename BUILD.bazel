@@ -1,0 +1,24 @@
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+
+filegroup(
+    name = "all",
+    srcs = glob(["**"]),
+    visibility = ["//visibility:public"],
+)
+
+cmake(
+    name = "libcurl",
+    cache_entries = {
+        "BUILD_TESTING": "OFF",
+        "BUILD_SHARED_LIBS": "OFF",
+        "CURL_STATIC_CRT": "ON",
+    },
+    lib_source = ":all",
+    out_static_libs = select({
+        "@bazel_tools//src/conditions:windows": [
+            "libcurl.lib",
+        ],
+        "//conditions:default": ["libcurl_a.a"],
+    }),
+    visibility = ["//visibility:public"],
+)
