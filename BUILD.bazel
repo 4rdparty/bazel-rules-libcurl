@@ -16,11 +16,9 @@ cmake(
     },
     lib_source = ":all",
     linkopts = select({
-        "@bazel_tools//src/conditions:windows": [
-            "ws2_32.lib wldap32.lib advapi32.lib kernel32.lib comdlg32.lib crypt32.lib normaliz.lib",
-        ],
-        "@bazel_tools//src/conditions:darwin": [],
-        "//conditions:default": [],
+        "@bazel_tools//src/conditions:windows": ["/DYNAMICBASE ws2_32.lib wldap32.lib advapi32.lib kernel32.lib comdlg32.lib crypt32.lib normaliz.lib"],  # Windows
+        "@bazel_tools//src/conditions:darwin": [],  # macOS
+        "//conditions:default": [],  # Linux
     }),
     out_static_libs = select({
         "@bazel_tools//src/conditions:windows": [
